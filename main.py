@@ -1,3 +1,10 @@
+"""Графический интерфейс утилиты копирования строк из Excel-файла.
+
+Позволяет загрузить таблицу Excel, отметить нужные строки с помощью
+чекбоксов, выбрать все строки сразу и сохранить отмеченные строки
+в новый файл Excel.
+"""
+
 import customtkinter as ctk
 import pandas as pd
 
@@ -5,6 +12,8 @@ from get_file import select_excel_file, save_excel_file
 
 
 class App(ctk.CTk):
+    """Главное окно приложения с таблицей и элементами управления."""
+
     def __init__(self):
         super().__init__()
 
@@ -50,6 +59,9 @@ class App(ctk.CTk):
         self.copy_button.pack(side="left", expand=True, padx=10)
 
     def select_file(self):
+        """Открывает диалог выбора файла и загружает таблицу в интерфейс."""
+
+
         file_path = select_excel_file()
         if not file_path:
             return
@@ -61,6 +73,13 @@ class App(ctk.CTk):
         self.display_table(self.df)
 
     def display_table(self, df):
+        """Отображает таблицу с чекбоксами для каждой строки.
+
+        Args:
+            df (pd.DataFrame): Загруженные данные для отображения.
+        """
+
+
         for widget in self.table_frame.winfo_children():
             widget.destroy()
 
@@ -107,17 +126,31 @@ class App(ctk.CTk):
         self.update_info()
 
     def on_row_toggle(self, _var):
+        """Обновляет счётчик и состояние чекбокса «Выбрать все» при
+        изменении выбора отдельной строки.
+
+        Args:
+            _var (ctk.BooleanVar): Переменная строки (не используется напрямую).
+        """
+
+
         self.update_info()
         selected = sum(v.get() for v in self.row_vars)
         self.select_all_var.set(selected == len(self.row_vars))
 
     def toggle_select_all(self):
+        """Отмечает или снимает все строки согласно чекбоксу «Выбрать все»."""
+
+
         state = self.select_all_var.get()
         for var in self.row_vars:
             var.set(state)
         self.update_info()
 
     def update_info(self):
+        """Обновляет текст счётчика: общее число и выбранное количество строк."""
+
+
         total = len(self.row_vars)
         selected = sum(v.get() for v in self.row_vars)
         self.info_label.configure(
@@ -125,6 +158,13 @@ class App(ctk.CTk):
         )
 
     def copy_data(self):
+        """Копирует отмеченные строки в новый файл Excel.
+
+        Открывает диалог сохранения, записывает выбранные строки в файл
+        и выводит результат или сообщение об ошибке в счётчик.
+        """
+
+
         if self.df is None:
             self.info_label.configure(text="Сначала загрузите файл")
             return

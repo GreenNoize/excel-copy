@@ -1,8 +1,20 @@
+"""Диалоги выбора и сохранения Excel-файлов."""
+
 import tkinter as tk
 from tkinter import filedialog
 
 
+
+
+
 def select_excel_file():
+    """Открывает диалог выбора файла с фильтром Excel.
+
+    Returns:
+        str: Путь к выбранному файлу или пустая строка, если выбор отменён.
+    """
+
+
     root = tk.Tk()
     root.withdraw()
 
@@ -21,6 +33,13 @@ def select_excel_file():
 
 
 def save_excel_file():
+    """Открывает диалог сохранения файла с фильтром Excel.
+
+    Returns:
+        str: Путь для сохранения или пустая строка, если выбор отменён.
+    """
+
+
     root = tk.Tk()
     root.withdraw()
 
